@@ -25,7 +25,7 @@ public class BoardSquare extends RectangleFigure {
 	}
 	
 	public void toggleColor() {
-		Color currentColor = piece.getBackgroundColor();
+		Color currentColor = getPieceColor();
 		piece.setBackgroundColor((currentColor == ColorConstants.black) ? ColorConstants.white : ColorConstants.black);
 	}
 	
@@ -35,5 +35,13 @@ public class BoardSquare extends RectangleFigure {
 	
 	public int getRow() {
 		return row;
+	}
+	
+	public boolean isPiecePlaced() {
+		return piece != null;
+	}
+	
+	public Color getPieceColor() {
+		return piece.getBackgroundColor();
 	}
 }

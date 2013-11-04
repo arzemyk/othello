@@ -10,6 +10,7 @@ public class GamePlay {
 		
 		final UIThread ui = new UIThread();
 		ui.start();
+		ui.setBoard(game.getBoard());
 		
 		Thread.sleep(3000);
 		

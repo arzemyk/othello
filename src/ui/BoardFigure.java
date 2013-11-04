@@ -1,5 +1,6 @@
 package ui;
 
+import model.Board;
 import model.Game;
 import model.GameState;
 
@@ -14,6 +15,11 @@ import org.eclipse.swt.graphics.Color;
 public class BoardFigure extends Figure {
 
 	private BoardSquare[][] squares;
+	private Board board;
+	
+	public BoardFigure(Board board) {
+		this.board = board;
+	}
 	
 	public void init() {
 		setBorder(new LineBorder());
@@ -46,8 +52,9 @@ public class BoardFigure extends Figure {
 							if (Game.state == GameState.HUMAN) {
 								BoardSquare selectedShape = (BoardSquare) event
 										.getSource();
-								selectedShape.placePiece(getColor(GameState.HUMAN));
-								Game.humanPlayer.makeMove(selectedShape.getRow(), selectedShape.getColumn());
+								if (Game.humanPlayer.makeMove(selectedShape.getRow(), selectedShape.getColumn())) {
+									update();
+								}
 							}
 						}
 					});
@@ -57,6 +64,23 @@ public class BoardFigure extends Figure {
 
 	}
 
+	public void update() {
+		GameState[][] boardTable = board.getBoardTable();
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (boardTable[i][j] == GameState.NONE) {
+					continue;
+				}
+				
+				if (!squares[i][j].isPiecePlaced()) {
+					squares[i][j].placePiece(getColor(boardTable[i][j]));
+				} else if (squares[i][j].getPieceColor() != getColor(boardTable[i][j])) {
+					squares[i][j].toggleColor();
+				}
+			}
+		}
+	}
+	
 	public void refresh(int row, int col, GameState color) {
 		squares[row][col].placePiece(getColor(color));
 	}

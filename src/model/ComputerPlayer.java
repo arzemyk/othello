@@ -6,12 +6,17 @@ public class ComputerPlayer extends Player{
 		super(board);
 	}
 
-	private int i = 0;
 	@Override
 	public void makeMove() {
-		board.makeMove(i, 0, Game.state);
-		board.getUI().update(i, 0, Game.state);
-		i++;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (board.isLegalMove(i, j, GameState.COMPUTER, false)) {
+					board.makeMove(i, j, Game.state);
+					board.getUI().update();
+					return;
+				}
+			}
+		}
 	}
 
 }

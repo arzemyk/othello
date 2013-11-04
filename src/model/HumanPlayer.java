@@ -8,14 +8,18 @@ public class HumanPlayer extends Player {
 
 	@Override
 	public void makeMove() {
-		
+
 	}
 
-	public void makeMove(int row, int col) {
-		Game.lock.lock();
-		board.makeMove(row, col, GameState.HUMAN);
-		Game.computerMove.signal();
-		Game.state = GameState.COMPUTER;
-		Game.lock.unlock();
+	public boolean makeMove(int row, int col) {
+		if (board.isLegalMove(row, col, GameState.HUMAN, false)) {
+			Game.lock.lock();
+			board.makeMove(row, col, GameState.HUMAN);
+			Game.computerMove.signal();
+			Game.state = GameState.COMPUTER;
+			Game.lock.unlock();
+			return true;
+		}
+		return false;
 	}
 }
