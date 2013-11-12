@@ -1,8 +1,7 @@
 package ui;
 
-import model.Board;
-import model.Game;
-import model.GameState;
+import model.Move;
+import model.PlayerColor;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
@@ -15,12 +14,8 @@ import org.eclipse.swt.graphics.Color;
 public class BoardFigure extends Figure {
 
 	private BoardSquare[][] squares;
-	private Board board;
-	
-	public BoardFigure(Board board) {
-		this.board = board;
-	}
-	
+	private Move move = null;
+
 	public void init() {
 		setBorder(new LineBorder());
 
@@ -49,12 +44,14 @@ public class BoardFigure extends Figure {
 					square.addMouseListener(new MouseListener.Stub() {
 						@Override
 						public void mousePressed(MouseEvent event) {
-							if (Game.state == GameState.HUMAN) {
-								BoardSquare selectedShape = (BoardSquare) event
-										.getSource();
-								if (Game.humanPlayer.makeMove(selectedShape.getRow(), selectedShape.getColumn())) {
-									update();
-								}
+							BoardSquare selectedShape = (BoardSquare) event
+									.getSource();
+
+							synchronized (BoardFigure.this) {
+								move = new Move(selectedShape.getRow(),
+										selectedShape.getColumn());
+
+								BoardFigure.this.notifyAll();
 							}
 						}
 					});
@@ -64,14 +61,13 @@ public class BoardFigure extends Figure {
 
 	}
 
-	public void update() {
-		GameState[][] boardTable = board.getBoardTable();
+	public void update(PlayerColor[][] boardTable) {
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (boardTable[i][j] == GameState.NONE) {
+				if (boardTable[i][j] == null) {
 					continue;
 				}
-				
+
 				if (!squares[i][j].isPiecePlaced()) {
 					squares[i][j].placePiece(getColor(boardTable[i][j]));
 				} else if (squares[i][j].getPieceColor() != getColor(boardTable[i][j])) {
@@ -80,13 +76,21 @@ public class BoardFigure extends Figure {
 			}
 		}
 	}
-	
-	public void refresh(int row, int col, GameState color) {
+
+	public void refresh(int row, int col, PlayerColor color) {
 		squares[row][col].placePiece(getColor(color));
 	}
 
-	public Color getColor(GameState color) {
-		return (color == GameState.HUMAN) ? ColorConstants.white
-				: ColorConstants.black;
+	public Color getColor(PlayerColor color) {
+		return color == PlayerColor.BLACK ? ColorConstants.black: ColorConstants.white;
 	}
+
+	public Move getMove() {
+		return move;
+	}
+
+	public void resetMove() {
+		move = null;
+	}
+
 }

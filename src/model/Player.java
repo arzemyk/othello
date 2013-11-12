@@ -1,11 +1,17 @@
 package model;
 
 public abstract class Player {
-	protected Board board;
+	protected final Board board;
+	protected final PlayerColor playerColor;
 	
-	public Player(Board board) {
+	public Player(Board board, PlayerColor playerColor) {
 		this.board = board;
+		this.playerColor = playerColor;
 	}
 	
-	public abstract void makeMove();
+	public PlayerColor getPlayerColor() {
+		return playerColor;
+	}
+
+	public abstract Move getNextMove();
 }

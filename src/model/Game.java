@@ -1,38 +1,29 @@
 package model;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 public class Game {
-	public static GameState state;
-	public static HumanPlayer humanPlayer;
-	private ComputerPlayer computerPlayer;
+
+	private Player blackPlayer;
+	private Player whitePlayer;
+
 	private final Board board;
 
-	final static Lock lock = new ReentrantLock();
-	final static Condition computerMove = lock.newCondition();
-
 	public Game() {
-		state = GameState.COMPUTER;
 		board = new Board();
-		computerPlayer = new ComputerPlayer(board);
-		humanPlayer = new HumanPlayer(board);
+		blackPlayer = new RandomPlayer(board, PlayerColor.BLACK);
+		whitePlayer = new RandomPlayer(board, PlayerColor.WHITE);
 	}
 
 	public void run() {
-		while (true) {
-			lock.lock();
-			if (state == GameState.COMPUTER) {
-				computerPlayer.makeMove();
-				state = GameState.HUMAN;
+		while (board.getGameState() == GameState.RUNNING) {
+
+			Player player;
+			if (board.getCurrentPlayerColor() == PlayerColor.BLACK) {
+				player = blackPlayer;
+			} else {
+				player = whitePlayer;
 			}
-			try {
-				computerMove.await();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			lock.unlock();
+
+			board.makeMove(player.getNextMove());
 		}
 	}
 
