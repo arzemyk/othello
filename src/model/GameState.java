@@ -1,5 +1,5 @@
 package model;
 
 public enum GameState {
-	NONE, HUMAN, COMPUTER;
+	RUNNING, BLACK_WON, WHITE_WON, DRAW;
 }

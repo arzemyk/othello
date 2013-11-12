@@ -1,25 +1,19 @@
 package model;
 
+import ui.UI;
+
 public class HumanPlayer extends Player {
 
-	public HumanPlayer(Board board) {
-		super(board);
+	private UI ui;
+	
+	public HumanPlayer(Board board, PlayerColor playerColor) {
+		super(board, playerColor);
 	}
 
 	@Override
-	public void makeMove() {
-
+	public Move getNextMove() {
+		return board.getUI().getMove(playerColor);
 	}
 
-	public boolean makeMove(int row, int col) {
-		if (board.isLegalMove(row, col, GameState.HUMAN, false)) {
-			Game.lock.lock();
-			board.makeMove(row, col, GameState.HUMAN);
-			Game.computerMove.signal();
-			Game.state = GameState.COMPUTER;
-			Game.lock.unlock();
-			return true;
-		}
-		return false;
-	}
+
 }

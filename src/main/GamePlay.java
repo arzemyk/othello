@@ -1,18 +1,17 @@
 package main;
 
 import model.Game;
-import ui.UIThread;
+import ui.UI;
 
 public class GamePlay {
 	
 	public static void main(String[] args) throws InterruptedException {
 		Game game = new Game();
 		
-		final UIThread ui = new UIThread();
+		final UI ui = new UI(game.getBoard());
 		ui.start();
-		ui.setBoard(game.getBoard());
 		
-		Thread.sleep(3000);
+		Thread.sleep(500);
 		
 		game.getBoard().setUI(ui);
 		game.run();
