@@ -4,7 +4,6 @@ import model.Board;
 import model.Move;
 import model.PlayerColor;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

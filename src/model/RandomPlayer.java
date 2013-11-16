@@ -15,6 +15,10 @@ public class RandomPlayer extends Player {
 	public Move getNextMove() {
 		List<Move> legalMoves = board.getLegalMoves();
 		
+		if (legalMoves.size() == 0) {
+			System.out.println("whops");
+		}
+		
 		return legalMoves.get(random.nextInt(legalMoves.size()));
 		
 	}

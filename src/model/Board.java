@@ -2,16 +2,18 @@ package model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ui.UI;
+import ai.strategy.PiecesNumberStrategy;
 
 public class Board {
 	private final static Logger LOGGER = Logger
 			.getLogger(Board.class.getName());
 
-	private static final int BOARD_SIZE = 8;
-	private PlayerColor[][] board;
+	public static final int BOARD_SIZE = 8;
+	private PlayerColor[][] boardTable;
 	private UI ui;
 
 	private int blackScore;
@@ -23,7 +25,28 @@ public class Board {
 	private List<Move> legalMoves = new LinkedList<>();
 
 	public Board() {
+		LOGGER.setLevel(Level.OFF);
 		initializeBoard();
+	}
+	
+	public Board(Board board) {		
+		
+		boardTable = new PlayerColor[BOARD_SIZE][];
+		for (int col = 0; col < BOARD_SIZE; col++) {
+			boardTable[col] = board.getBoardTable()[col].clone();
+		}
+		
+		currentPlayerColor = board.getCurrentPlayerColor();
+		gameState = board.getGameState();
+		legalMoves.addAll(board.getLegalMoves());
+		ui = board.getUI();
+		
+		blackScore = board.getBlackScores();
+		whiteScore = board.getWhiteScores();
+	}
+	
+	public Board clone() {
+		return new Board(this);
 	}
 
 	public void makeMove(Move move) {
@@ -42,6 +65,10 @@ public class Board {
 		}
 
 		refreshGameState();
+
+		LOGGER.info(String.format("PiecesNumber for %s: %f",
+				currentPlayerColor,
+				new PiecesNumberStrategy().rankBoard(this, PlayerColor.BLACK)));
 
 	}
 
@@ -62,7 +89,7 @@ public class Board {
 	}
 
 	public PlayerColor[][] getBoardTable() {
-		return board;
+		return boardTable;
 	}
 
 	public int getBlackScores() {
@@ -71,6 +98,10 @@ public class Board {
 
 	public int getWhiteScores() {
 		return whiteScore;
+	}
+	
+	public int getPiecesNumber() {
+		return blackScore + whiteScore;
 	}
 
 	public GameState getGameState() {
@@ -82,7 +113,7 @@ public class Board {
 		int steps;
 		int i, j;
 
-		if (board[row][col] != null || row < 0 || row >= BOARD_SIZE || col < 0
+		if (boardTable[row][col] != null || row < 0 || row >= BOARD_SIZE || col < 0
 				|| col >= BOARD_SIZE) {
 			return false;
 		}
@@ -99,11 +130,11 @@ public class Board {
 						&& (i < BOARD_SIZE)
 						&& (j >= 0)
 						&& (j < BOARD_SIZE)
-						&& (board[i][j] == getOtherPlayerColor(currentPlayerColor)));
+						&& (boardTable[i][j] == getOtherPlayerColor(currentPlayerColor)));
 
 				if ((i >= 0) && (i < BOARD_SIZE) && (j >= 0)
 						&& (j < BOARD_SIZE) && (steps > 1)
-						&& board[i][j] == currentPlayerColor) {
+						&& boardTable[i][j] == currentPlayerColor) {
 					legal = true;
 				}
 			}
@@ -111,31 +142,34 @@ public class Board {
 
 		return legal;
 	}
+	
+	private void finishGame() {
+		if (blackScore > whiteScore) {
+			gameState = GameState.BLACK_WON;
+
+			LOGGER.info(String.format("Black won"));
+		} else if (whiteScore > blackScore) {
+			gameState = GameState.WHITE_WON;
+
+			LOGGER.info(String.format("White won"));
+		} else {
+			gameState = GameState.DRAW;
+
+			LOGGER.info(String.format("Draw"));
+		}
+
+		legalMoves.clear();
+
+		if (ui != null) {
+			ui.update();
+		}
+	}
 
 	private void refreshGameState() {
 		refreshScores();
 
 		if (blackScore + whiteScore == BOARD_SIZE * BOARD_SIZE) {
-			if (blackScore > whiteScore) {
-				gameState = GameState.BLACK_WON;
-				
-				LOGGER.info(String.format("Black won"));
-			} else if (whiteScore > blackScore) {
-				gameState = GameState.WHITE_WON;
-				
-				LOGGER.info(String.format("White won"));
-			} else {
-				gameState = GameState.DRAW;
-				
-				LOGGER.info(String.format("Draw"));
-			}
-
-			legalMoves.clear();
-
-			if (ui != null) {
-				ui.update();
-			}
-
+			finishGame();			
 			return;
 		}
 
@@ -147,6 +181,14 @@ public class Board {
 
 			currentPlayerColor = getOtherPlayerColor(currentPlayerColor);
 			refreshLegalMoves();
+			
+			if (legalMoves.size() == 0) {
+				LOGGER.info(String.format("No legal moves for: %s. Game ends.",
+						currentPlayerColor));
+
+				finishGame();
+				return;
+			}
 		}
 
 		if (ui != null) {
@@ -155,19 +197,19 @@ public class Board {
 	}
 
 	private void initializeBoard() {
-		board = new PlayerColor[BOARD_SIZE][];
+		boardTable = new PlayerColor[BOARD_SIZE][];
 		for (int row = 0; row < BOARD_SIZE; row++) {
-			board[row] = new PlayerColor[BOARD_SIZE];
+			boardTable[row] = new PlayerColor[BOARD_SIZE];
 			for (int col = 0; col < BOARD_SIZE; col++) {
-				board[row][col] = null;
+				boardTable[row][col] = null;
 			}
 		}
 
-		board[3][3] = PlayerColor.WHITE;
-		board[4][4] = PlayerColor.WHITE;
+		boardTable[3][3] = PlayerColor.WHITE;
+		boardTable[4][4] = PlayerColor.WHITE;
 
-		board[3][4] = PlayerColor.BLACK;
-		board[4][3] = PlayerColor.BLACK;
+		boardTable[3][4] = PlayerColor.BLACK;
+		boardTable[4][3] = PlayerColor.BLACK;
 
 		currentPlayerColor = PlayerColor.BLACK;
 
@@ -175,7 +217,7 @@ public class Board {
 		refreshLegalMoves();
 
 		gameState = GameState.RUNNING;
-		
+
 		LOGGER.info("Board initialized");
 	}
 
@@ -185,8 +227,8 @@ public class Board {
 
 		for (int row = 0; row < BOARD_SIZE; row++) {
 			for (int col = 0; col < BOARD_SIZE; col++) {
-				if (board[row][col] != null) {
-					if (board[row][col] == PlayerColor.BLACK) {
+				if (boardTable[row][col] != null) {
+					if (boardTable[row][col] == PlayerColor.BLACK) {
 						blackScore++;
 					} else {
 						whiteScore++;
@@ -198,7 +240,7 @@ public class Board {
 
 	private void makeFlip(int row, int col) {
 
-		if (board[row][col] != null || row < 0 || row >= BOARD_SIZE || col < 0
+		if (boardTable[row][col] != null || row < 0 || row >= BOARD_SIZE || col < 0
 				|| col >= BOARD_SIZE) {
 			throw new IllegalStateException("Cannot flip - illegal move");
 		}
@@ -218,19 +260,19 @@ public class Board {
 						&& (i < BOARD_SIZE)
 						&& (j >= 0)
 						&& (j < BOARD_SIZE)
-						&& (board[i][j] == getOtherPlayerColor(currentPlayerColor)));
+						&& (boardTable[i][j] == getOtherPlayerColor(currentPlayerColor)));
 
 				if ((i >= 0) && (i < BOARD_SIZE) && (j >= 0)
 						&& (j < BOARD_SIZE) && (steps > 1)
-						&& board[i][j] == getCurrentPlayerColor()) {
+						&& boardTable[i][j] == getCurrentPlayerColor()) {
 
 					for (int k = 1; k < steps; k++)
-						board[row + ydir * k][col + xdir * k] = currentPlayerColor;
+						boardTable[row + ydir * k][col + xdir * k] = currentPlayerColor;
 				}
 			}
 		}
 
-		board[row][col] = getCurrentPlayerColor();
+		boardTable[row][col] = getCurrentPlayerColor();
 	}
 
 	private void refreshLegalMoves() {

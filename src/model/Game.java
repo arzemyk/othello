@@ -1,5 +1,6 @@
 package model;
 
+
 public class Game {
 
 	private Player blackPlayer;
@@ -9,11 +10,18 @@ public class Game {
 
 	public Game() {
 		board = new Board();
-		blackPlayer = new RandomPlayer(board, PlayerColor.BLACK);
-		whitePlayer = new RandomPlayer(board, PlayerColor.WHITE);
+		
+		if (board.getUI() != null) {
+			board.getUI().start();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	public void run() {
+	public GameState run(Player blackPlayer, Player whitePlayer) {
 		while (board.getGameState() == GameState.RUNNING) {
 
 			Player player;
@@ -25,6 +33,8 @@ public class Game {
 
 			board.makeMove(player.getNextMove());
 		}
+
+		return board.getGameState();		
 	}
 
 	public Board getBoard() {
