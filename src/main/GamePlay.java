@@ -15,7 +15,7 @@ public class GamePlay {
 		int blackWon = 0;
 		int whiteWon = 0;
 		int draws = 0;
-
+		
 		for (int i = 0; i < NUMBER_OF_GAMES; i++) {
 			Game game = new Game();
 
@@ -24,10 +24,16 @@ public class GamePlay {
 
 			EvolutionaryPlayer evolutionaryPlayer = new EvolutionaryPlayer(
 					game.getBoard(), PlayerColor.BLACK);
+			EvolutionaryPlayer evolutionaryPlayer2 = new EvolutionaryPlayer(
+					game.getBoard(), PlayerColor.WHITE);
 			RandomPlayer randomPlayer = new RandomPlayer(game.getBoard(),
 					PlayerColor.WHITE);
+			RandomPlayer randomPlayer2 = new RandomPlayer(game.getBoard(),
+					PlayerColor.BLACK);
 
-			GameState result = game.run(evolutionaryPlayer, randomPlayer);
+			
+			
+			GameState result = game.run(randomPlayer2, evolutionaryPlayer);
 			switch (result) {
 			case BLACK_WON:
 				blackWon++;

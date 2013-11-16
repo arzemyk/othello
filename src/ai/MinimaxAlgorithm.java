@@ -67,14 +67,19 @@ public class MinimaxAlgorithm {
 			}
 		}
 		
-		LOGGER.info("Returning best move");
+		if (LOGGER.isLoggable(Level.INFO)) {
+			LOGGER.info("Returning best move");
+		}
+		
 		return bestMove;
 	}
 
 	public double rankNode(Board board, int lookAhead, double alpha,
 			double beta, PlayerColor initialPlayer) {
 
-		LOGGER.info(String.format("lookAhead: %d, alpha: %f , beta: %f", lookAhead, alpha, beta	));
+		if (LOGGER.isLoggable(Level.INFO)) {
+			LOGGER.info(String.format("lookAhead: %d, alpha: %f , beta: %f", lookAhead, alpha, beta	));
+		}
 		
 		switch (board.getGameState()) {
 

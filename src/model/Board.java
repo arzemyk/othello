@@ -28,23 +28,23 @@ public class Board {
 		LOGGER.setLevel(Level.OFF);
 		initializeBoard();
 	}
-	
-	public Board(Board board) {		
-		
+
+	public Board(Board board) {
+
 		boardTable = new PlayerColor[BOARD_SIZE][];
 		for (int col = 0; col < BOARD_SIZE; col++) {
 			boardTable[col] = board.getBoardTable()[col].clone();
 		}
-		
+
 		currentPlayerColor = board.getCurrentPlayerColor();
 		gameState = board.getGameState();
 		legalMoves.addAll(board.getLegalMoves());
 		ui = board.getUI();
-		
+
 		blackScore = board.getBlackScores();
 		whiteScore = board.getWhiteScores();
 	}
-	
+
 	public Board clone() {
 		return new Board(this);
 	}
@@ -56,8 +56,10 @@ public class Board {
 					move.toString()));
 		}
 
-		LOGGER.info(String.format("Making move: %s, %s", currentPlayerColor,
-				move));
+		if (LOGGER.isLoggable(Level.INFO)) {
+			LOGGER.info(String.format("Making move: %s, %s",
+					currentPlayerColor, move));
+		}
 		makeFlip(move.getRow(), move.getCol());
 
 		if (ui != null) {
@@ -66,10 +68,11 @@ public class Board {
 
 		refreshGameState();
 
-		LOGGER.info(String.format("PiecesNumber for %s: %f",
-				currentPlayerColor,
-				new PiecesNumberStrategy().rankBoard(this, PlayerColor.BLACK)));
-
+		if (LOGGER.isLoggable(Level.INFO)) {
+			LOGGER.info(String.format("PiecesNumber for %s: %f",
+					currentPlayerColor, new PiecesNumberStrategy().rankBoard(
+							this, PlayerColor.BLACK)));
+		}
 	}
 
 	public List<Move> getLegalMoves() {
@@ -99,7 +102,7 @@ public class Board {
 	public int getWhiteScores() {
 		return whiteScore;
 	}
-	
+
 	public int getPiecesNumber() {
 		return blackScore + whiteScore;
 	}
@@ -113,8 +116,8 @@ public class Board {
 		int steps;
 		int i, j;
 
-		if (boardTable[row][col] != null || row < 0 || row >= BOARD_SIZE || col < 0
-				|| col >= BOARD_SIZE) {
+		if (boardTable[row][col] != null || row < 0 || row >= BOARD_SIZE
+				|| col < 0 || col >= BOARD_SIZE) {
 			return false;
 		}
 
@@ -142,20 +145,20 @@ public class Board {
 
 		return legal;
 	}
-	
+
 	private void finishGame() {
 		if (blackScore > whiteScore) {
 			gameState = GameState.BLACK_WON;
 
-			LOGGER.info(String.format("Black won"));
+			LOGGER.info("Black won");
 		} else if (whiteScore > blackScore) {
 			gameState = GameState.WHITE_WON;
 
-			LOGGER.info(String.format("White won"));
+			LOGGER.info("White won");
 		} else {
 			gameState = GameState.DRAW;
 
-			LOGGER.info(String.format("Draw"));
+			LOGGER.info("Draw");
 		}
 
 		legalMoves.clear();
@@ -169,22 +172,27 @@ public class Board {
 		refreshScores();
 
 		if (blackScore + whiteScore == BOARD_SIZE * BOARD_SIZE) {
-			finishGame();			
+			finishGame();
 			return;
 		}
 
 		currentPlayerColor = getOtherPlayerColor(currentPlayerColor);
 		refreshLegalMoves();
 		if (legalMoves.size() == 0) {
-			LOGGER.info(String.format("No legal moves for: %s",
-					currentPlayerColor));
+			if (LOGGER.isLoggable(Level.INFO)) {
+				LOGGER.info(String.format("No legal moves for: %s",
+						currentPlayerColor));
+			}
 
 			currentPlayerColor = getOtherPlayerColor(currentPlayerColor);
 			refreshLegalMoves();
-			
+
 			if (legalMoves.size() == 0) {
-				LOGGER.info(String.format("No legal moves for: %s. Game ends.",
-						currentPlayerColor));
+				if (LOGGER.isLoggable(Level.INFO)) {
+					LOGGER.info(String.format(
+							"No legal moves for: %s. Game ends.",
+							currentPlayerColor));
+				}
 
 				finishGame();
 				return;
@@ -240,8 +248,8 @@ public class Board {
 
 	private void makeFlip(int row, int col) {
 
-		if (boardTable[row][col] != null || row < 0 || row >= BOARD_SIZE || col < 0
-				|| col >= BOARD_SIZE) {
+		if (boardTable[row][col] != null || row < 0 || row >= BOARD_SIZE
+				|| col < 0 || col >= BOARD_SIZE) {
 			throw new IllegalStateException("Cannot flip - illegal move");
 		}
 
