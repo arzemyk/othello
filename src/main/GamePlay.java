@@ -23,10 +23,9 @@ public class GamePlay {
 			// game.getBoard().setUI(ui);
 
 			EvolutionaryPlayer evolutionaryPlayer = new EvolutionaryPlayer(
-					game.getBoard(), PlayerColor.BLACK);
-			evolutionaryPlayer.setStrategyWeights(new double[] {1.0, 2.0});
+					game.getBoard(), PlayerColor.BLACK, new double[] {1.0, 2.0});
 			EvolutionaryPlayer evolutionaryPlayer2 = new EvolutionaryPlayer(
-					game.getBoard(), PlayerColor.WHITE);
+					game.getBoard(), PlayerColor.WHITE, new double[] {1.0, 2.0});
 			RandomPlayer randomPlayer = new RandomPlayer(game.getBoard(),
 					PlayerColor.WHITE);
 			RandomPlayer randomPlayer2 = new RandomPlayer(game.getBoard(),

@@ -147,11 +147,11 @@ public class MinimaxAlgorithm {
 	}
 	
 	public void setStrategyWeights(double[] weights) {
-		if (weights.length != StrategyUtil.strategies.length) {
+		if (weights.length != StrategyUtil.strategiesSize) {
 			throw new IllegalArgumentException("Number of given weigths doesn't match strategies number");
 		}
 		
-		for (int i = 0; i < weights.length; i++){
+		for (int i = 0; i < StrategyUtil.strategiesSize; i++){
 			addStrategy(StrategyUtil.strategies[i], weights[i]);
 		}
 	}
