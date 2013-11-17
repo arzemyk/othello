@@ -1,7 +1,6 @@
 package model;
 
 import ai.MinimaxAlgorithm;
-import ai.strategy.PiecesNumberStrategy;
 
 public class EvolutionaryPlayer extends Player {
 
@@ -11,8 +10,10 @@ public class EvolutionaryPlayer extends Player {
 	
 	public EvolutionaryPlayer(Board board, PlayerColor playerColor) {
 		super(board, playerColor);
-		
-		minimax.addStrategy(new PiecesNumberStrategy(), 1.0);
+	}
+	
+	public void setStrategyWeights(double weights[]) {
+		minimax.setStrategyWeights(weights);
 	}
 
 	@Override

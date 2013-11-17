@@ -30,7 +30,7 @@ public class MinimaxAlgorithm {
 		
 		public Move move;
 	}
-
+	
 	private List<StrategyInfo> strategies = new LinkedList<>();
 
 	public MinimaxAlgorithm() {
@@ -145,9 +145,19 @@ public class MinimaxAlgorithm {
 			return beta;
 		}
 	}
+	
+	public void setStrategyWeights(double[] weights) {
+		if (weights.length != StrategyUtil.strategies.length) {
+			throw new IllegalArgumentException("Number of given weigths doesn't match strategies number");
+		}
+		
+		for (int i = 0; i < weights.length; i++){
+			addStrategy(StrategyUtil.strategies[i], weights[i]);
+		}
+	}
 
-	private boolean isMaximizing(Board board, PlayerColor initialPlayer) {
+	private static boolean isMaximizing(Board board, PlayerColor initialPlayer) {
 		return board.getCurrentPlayerColor() == initialPlayer;
 	}
-	
+
 }

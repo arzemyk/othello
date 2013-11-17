@@ -50,7 +50,7 @@ public class Board {
 	}
 
 	public void makeMove(Move move) {
-		if (!isMoveLegal(move.getRow(), move.getCol())) {
+		if (!isMoveLegal(move.getRow(), move.getCol(), getCurrentPlayerColor())) {
 			throw new IllegalStateException(String.format(
 					"This move is illegal: %s, %s ", currentPlayerColor,
 					move.toString()));
@@ -111,7 +111,7 @@ public class Board {
 		return gameState;
 	}
 
-	private boolean isMoveLegal(int row, int col) {
+	public boolean isMoveLegal(int row, int col, PlayerColor playerColor) {
 		boolean legal = false;
 		int steps;
 		int i, j;
@@ -133,11 +133,11 @@ public class Board {
 						&& (i < BOARD_SIZE)
 						&& (j >= 0)
 						&& (j < BOARD_SIZE)
-						&& (boardTable[i][j] == getOtherPlayerColor(currentPlayerColor)));
+						&& (boardTable[i][j] == getOtherPlayerColor(playerColor)));
 
 				if ((i >= 0) && (i < BOARD_SIZE) && (j >= 0)
 						&& (j < BOARD_SIZE) && (steps > 1)
-						&& boardTable[i][j] == currentPlayerColor) {
+						&& boardTable[i][j] == playerColor) {
 					legal = true;
 				}
 			}
@@ -146,6 +146,11 @@ public class Board {
 		return legal;
 	}
 
+	public static PlayerColor getOtherPlayerColor(PlayerColor color) {
+		return color == PlayerColor.WHITE ? PlayerColor.BLACK
+				: PlayerColor.WHITE;
+	}
+	
 	private void finishGame() {
 		if (blackScore > whiteScore) {
 			gameState = GameState.BLACK_WON;
@@ -288,16 +293,11 @@ public class Board {
 
 		for (int row = 0; row < BOARD_SIZE; row++) {
 			for (int col = 0; col < BOARD_SIZE; col++) {
-				if (isMoveLegal(row, col)) {
+				if (isMoveLegal(row, col, getCurrentPlayerColor())) {
 					legalMoves.add(new Move(row, col));
 				}
 			}
 		}
-	}
-
-	private PlayerColor getOtherPlayerColor(PlayerColor color) {
-		return color == PlayerColor.WHITE ? PlayerColor.BLACK
-				: PlayerColor.WHITE;
 	}
 
 }
