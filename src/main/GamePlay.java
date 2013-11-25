@@ -5,6 +5,7 @@ import model.Game;
 import model.GameState;
 import model.PlayerColor;
 import model.RandomPlayer;
+import ui.UI;
 
 public class GamePlay {
 
@@ -19,11 +20,14 @@ public class GamePlay {
 		for (int i = 0; i < NUMBER_OF_GAMES; i++) {
 			Game game = new Game();
 
-			// final UI ui = new UI(game.getBoard());
-			// game.getBoard().setUI(ui);
-
+			//final UI ui = new UI(game.getBoard());
+			//game.getBoard().setUI(ui);
+			//ui.start();
+			//Thread.sleep(300);
+					
+			
 			EvolutionaryPlayer evolutionaryPlayer = new EvolutionaryPlayer(
-					game.getBoard(), PlayerColor.BLACK, new double[] {1.0, 2.0});
+					game.getBoard(), PlayerColor.WHITE, new double[] {1.0, 2.0});
 			EvolutionaryPlayer evolutionaryPlayer2 = new EvolutionaryPlayer(
 					game.getBoard(), PlayerColor.WHITE, new double[] {1.0, 2.0});
 			RandomPlayer randomPlayer = new RandomPlayer(game.getBoard(),
