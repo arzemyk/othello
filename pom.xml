@@ -21,12 +21,16 @@
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/releases/kepler</url>
 		</repository>
-				<repository>
+		<repository>
 			<id>gef</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/tools/gef/updates/releases</url>
 		</repository>
-		</repositories>
+		<repository>
+			<id>jmath</id>
+			<url>http://igetdb.sourceforge.net/maven2-repository/</url>
+		</repository>
+	</repositories>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
@@ -49,7 +53,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -65,6 +69,11 @@
 			<groupId>org.eclipse.swt.gtk.linux</groupId>
 			<artifactId>x86_64</artifactId>
 			<version>${swt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jmathplot</groupId>
+			<artifactId>jmathplot</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 </project>

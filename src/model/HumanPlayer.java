@@ -1,11 +1,6 @@
 package model;
 
-import ui.UI;
-
-public class HumanPlayer extends Player {
-
-	private UI ui;
-	
+public class HumanPlayer extends Player {	
 	public HumanPlayer(Board board, PlayerColor playerColor) {
 		super(board, playerColor);
 	}

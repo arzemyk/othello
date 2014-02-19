@@ -5,7 +5,6 @@ import model.Game;
 import model.GameState;
 import model.PlayerColor;
 import model.RandomPlayer;
-import ui.UI;
 
 public class GamePlay {
 

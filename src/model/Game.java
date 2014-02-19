@@ -2,10 +2,7 @@ package model;
 
 
 public class Game {
-
-	private Player blackPlayer;
-	private Player whitePlayer;
-
+	
 	private final Board board;
 
 	public Game() {
