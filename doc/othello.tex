@@ -1,0 +1,73 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, polish]{babel}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{listings}
+\usepackage{ltxtable}
+\usepackage{fancyhdr}
+\usepackage{longtable}
+\usepackage[usenames,dvipsnames]{color}
+\definecolor{dark-gray}{gray}{0.35}
+\usepackage[font={color=dark-gray,small,it}, labelfont=bf]{caption}
+\setlength{\headheight}{15.2pt}
+\pagestyle{fancyplain}
+\usepackage{lastpage}
+\linespread{1.5}
+\lstset{
+language=C,
+basicstyle=\small\sffamily,
+numbers=left,
+numberstyle=\tiny,
+frame=tb,
+columns=fullflexible,
+showstringspaces=false
+}
+\setlength{\textheight}{22cm}
+\setlength{\textwidth}{15.92cm}
+\setlength{\headwidth}{15.92cm}
+\setlength{\footskip}{10mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+\setlength{\topmargin}{0mm}
+\setlength{\headsep}{5mm}
+
+\bibliographystyle{abbrv}
+
+\renewcommand{\footrulewidth}{0.4pt}
+
+\newcommand{\titleinfo}{Othello}
+\newcommand{\subtitleinfo}{!!!!!!!!!! cośtam było ładnego że algorytm gen}
+\newcommand{\authors}{Michał Konarski, Aleksandra Rzemyk}
+\newcommand{\subject}{Inteligencja Obliczeniowa}
+\newcommand{\academicyear}{2013/2014}
+
+\date{\today}
+
+
+\title{\titleinfo}
+\author{}
+\date{\today}
+\setlength\parindent{0pt}
+
+\begin{document}
+
+\include{strona_tytulowa}
+
+
+\rfoot{\scriptsize{Page: {\thepage} from \pageref{LastPage}}}
+\rhead{\scriptsize{\titleinfo}} %wstawić tytuł
+\cfoot{\vspace{4ex}\normalsize\thepage}
+
+\input{intro}
+\input{model}
+\input{description}
+\input{visualisation}
+\input{experiments}
+\input{summary}
+\newpage
+      
+\end{document}
