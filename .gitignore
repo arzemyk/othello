@@ -2,3 +2,10 @@
 .project
 .classpath
 target
+doc/*.aux
+doc/*.toc
+doc/*.tex.backup
+doc/*.bbl
+doc/*.log
+doc/*.pdf
+doc/*.out
