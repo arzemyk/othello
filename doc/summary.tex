@@ -2,12 +2,12 @@
 
 Na otrzymanych wykresach widać, że jeżeli po 60 iteracjach wyliczone wagi zbiegają, to zbiegają do podobnych wartości:
  \begin{itemize}
- \item PiecesNumberStrategy - ~0.5 lub ~3.9,
- \item MobilityStrategy - w przedziale ~6.0 do ~8.0,
- \item CornerStrategy - ~5.0,
- \item EdgesStrategy - ~4.0,
- \item NearCornerStrategy - ~2.0,
- \item NearEdgesStrategy - ~0.5.
+ \item PiecesNumberStrategy - $\sim0.5$ lub $\sim3.9$,
+ \item MobilityStrategy - w przedziale $\sim6.0$ do $\sim8.0$,
+ \item CornerStrategy - $\sim5.0$,
+ \item EdgesStrategy - $\sim4.0$,
+ \item NearCornerStrategy - $\sim2.0$,
+ \item NearEdgesStrategy - $\sim0.5$.
 \end{itemize}
 
-Najprawdopodobniej MobilityStrategy jest najważniejszą strategią (zawsze otrzymuje dużą wagę). Kolejne w kolejności są strategie CornerStrategy i EdgesStrategy, co potwierdza wcześniejsze przypuszczenia. Mało istotne w trakcie gry są miejsca koło krawędzi i rogów. Łatwo również zauważyć, że strategia PiecesNumberStrategy często jest mało istotna ze względu na brak jej efektywności. Potwierdza to stwierdzenie, że w othello istotny jest rozkład pionów na planszy, niekoniecznie zaś ich liczba.
+Najprawdopodobniej MobilityStrategy jest najlepszą strategią (zawsze otrzymuje dużą wagę). Kolejne w kolejności są strategie CornerStrategy i EdgesStrategy, co potwierdza wcześniejsze przypuszczenia. Mało istotne w trakcie gry są miejsca koło krawędzi i rogów. Łatwo również zauważyć, że strategia PiecesNumberStrategy często jest mało istotna ze względu na brak jej efektywności. Potwierdza to stwierdzenie, że w Othello istotny jest rozkład pionów na planszy, niekoniecznie zaś ich liczba.
