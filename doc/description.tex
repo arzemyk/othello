@@ -1,5 +1,41 @@
 \section{Opis rozwiązania} 
 
-\subsection{Wykorzystane technologie}
+\subsection{Model}
 
-\subsection{Opis algorytmu}
+Podstawową jednostką w zaproponowanym rozwiązaniu jest Player, który ma przypisany kolor pionów i wykonuje swoje ruchy zgodnie z zaimplementowaną strategią. W modelu dostępne są trzy typy graczy: HumanPlayer, RandomPlayer oraz EvolutionPlayer.
+
+\subsection{EvolutionPlayer}
+
+\subsubsection{Drzewo gry}
+Etapy gry Othello można przedstawić w formie drzewa, w którym każdy węzeł jest sytuacją na planszy, zaś krawędź symbolizuje wykonanie ruchu, który transformuje jedną sytuację na planszy na drugą. Przeszukując takie drzewo można znaleźć ruch, którego wykonanie daje największe szanse na wygraną. Łatwo jednak zauważyć, że takie drzewo jest duże, a więc jego przeszukiwanie będzie czasochłonne. Dla Othello brak również funkcji oceny sytuacji na planszy, dzięki której przeszukiwanie całego drzewa nie byłoby konieczne.
+
+\subsubsection{Algorytm minimax}
+Zakładając, że istnieje funkcja oceny sytuacji na planszy, której wynik wskazuje na przewagę jednego z graczy, możemy użyć algorytmu minimax. Gracz, który aktualnie wykonuje ruch jest graczem maksymalizującym (chce swoim ruchem zmaksymalizować szanse na wygraną) zaś jego przeciwnik jest graczem minimalizującym (chce swoim ruchem zminimalizować szanse przeciwnika na wygraną, a więc zmaksymalizować swoje). Algorytm opiera się na rekurencyjnym schodzeniu w dół drzewa, aż do momentu osiągnięcia pewnej, zadanej głębokości. Następnie ewaluowana jest sytuacja na planszy, zaś jej wynik jest przekazywany w górę drzewa. Jeśli dany poziom drzewa reprezentuje ruch maksymalizujący - jego wartością jest maksimum węzłów, których jest rodzicem, analogicznie dla ruchu minimalizującego. Łatwo zauważyć, że nawet tak postawiony problem może być czasochłonny, ze względu na rozległość drzewa.
+
+\subsection{Alfa-beta odcięcie}
+Aby poprawić czas obliczania dla algorytmu minimax można zastosować algorytm alfa-beta. Ideą tej optymalizacji jest odcinanie gałęzi drzewa, o których z góry wiadomo, że nic nie wniosą do końcowego wyniku.
+
+\subsubsection{Ocena ruchu}
+W zaimplementowanym rozwiązaniu mamy do czynienia z sześcioma strategiami:
+
+\begin{enumerate}
+ \item \textbf{PiecesNumberStrategy} - gracz dąży do posiadania jak największej liczby pionów
+ \item \textbf{MobilityStrategy} - gracz dąży do posiadania jak największej liczby możliwych ruchów
+ \item \textbf{CornerStrategy} - gracz dąży do posiadania jak największej liczby pionów w rogach
+ \item \textbf{EdgesStrategy} - gracz dąży do posiadania jak największej liczby pionów na krawędziach
+ \item \textbf{NearCornerStrategy} - gracz dąży do posiadania jak największej liczby pionów w okolicach rogów
+ \item \textbf{NearEdgesStrategy} - gracz dąży do posiadania jak największej liczby pionów w okolicach krawędzi
+\end{enumerate}
+
+Stan na planszy jest oceniany z perspektywy każdej ze strategii, a jego wartość mieści się w przedziale [-1, 1]. Każda strategia ma swoją wagę, której wartość mieści się w zakresie [-10, 10]. Ostateczną oceną sytuacji na planszy jest suma iloczynów wartości strategii i ich wag.
+
+
+\subsection{Algorytm genetyczny}
+W ramach algorytmu genetycznego osobniki rozgrywają ze sobą partię Othello. Za każdą wygraną bądź remis osobnik otrzymuje zadaną liczbę punktów. Każdy osobnik rozgrywa zadaną liczbę rozgrywek z wszystkimi pozostałymi, zarówno jako gracz biały jak i czarny.
+
+\begin{enumerate}
+ \item \textbf{Kodowanie:} każdy osobnik jest kodowany za pomocą 6 wag odpowiadających strategiom oceny ruchu.
+ \item \textbf{Metoda selekcji:} metoda ruletki.
+ \item \textbf{Operatory przeszukiwania:} krzyżowanie i mutacja.
+ \item \textbf{Funkcja oceny:} miarą oceny osobnika jest liczba punktów zdobytych podczas gry z innymi osobnikami.
+\end{enumerate}
