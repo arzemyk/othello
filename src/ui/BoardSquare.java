@@ -14,12 +14,14 @@ public class BoardSquare extends RectangleFigure {
 		setSize(50, 50);
 		this.row = row;
 		this.column = column;
+		setBackgroundColor(ColorConstants.darkGreen);
 	}
 	
 	public void placePiece(Color color) {
 		piece = new Ellipse();
 		piece.setSize(50, 50);
 		piece.setBackgroundColor(color);
+		piece.setForegroundColor(ColorConstants.black);
 		piece.setLocation(getLocation());
 		add(piece);
 	}
